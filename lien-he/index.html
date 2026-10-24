@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Liên hệ — Racons</title>
+  <link rel="icon" href="/assets/img/logo.svg">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body data-page="lien-he" data-header="transparent">
+  <div id="site-header"></div>
+
+  <main>
+    <section class="page-hero" style="min-height:52vh">
+      <div class="page-hero__bg" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2200&q=75')"></div>
+      <div class="container">
+        <span class="eyebrow">Liên hệ</span>
+        <h1 class="title-xl">Hãy trò chuyện<br>cùng Racons</h1>
+        <div class="breadcrumb"><a href="/">Trang chủ</a> / Liên hệ</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container contact-grid">
+        <div>
+          <span class="eyebrow">Thông tin</span>
+          <h2 class="title-lg" style="margin:16px 0 24px">Văn phòng Racons</h2>
+          <ul class="contact-info">
+            <li><span class="ico">⌂</span><div><small>Địa chỉ</small>123 Đường ABC, Phường XYZ, TP. Hồ Chí Minh</div></li>
+            <li><span class="ico">☎</span><div><small>Hotline</small><a href="tel:0900000000">0900 000 000</a></div></li>
+            <li><span class="ico">✉</span><div><small>Email</small><a href="mailto:info@racons.vn">info@racons.vn</a></div></li>
+            <li><span class="ico">◷</span><div><small>Giờ làm việc</small>Thứ 2 – Thứ 7: 8:00 – 17:30</div></li>
+          </ul>
+        </div>
+
+        <form class="form" data-demo>
+          <h3 class="title-md" style="margin-bottom:24px">Gửi yêu cầu tư vấn</h3>
+          <div class="form-row">
+            <div class="field"><label for="name">Họ và tên *</label><input id="name" required></div>
+            <div class="field"><label for="phone">Số điện thoại *</label><input id="phone" type="tel" required></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="email">Email</label><input id="email" type="email"></div>
+            <div class="field">
+              <label for="service">Dịch vụ quan tâm</label>
+              <select id="service">
+                <option>Thiết kế nội thất</option>
+                <option>Thiết kế ngoại thất</option>
+                <option>Thiết kế kiến trúc trọn gói</option>
+                <option>Xây nhà trọn gói</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="type">Loại công trình</label>
+              <select id="type"><option>Villa - Biệt thự</option><option>Nhà phố</option><option>Căn hộ</option><option>Văn phòng</option></select>
+            </div>
+            <div class="field"><label for="area">Diện tích (m²)</label><input id="area" type="number" min="0"></div>
+          </div>
+          <div class="field"><label for="msg">Nội dung</label><textarea id="msg" placeholder="Mô tả ngắn nhu cầu của bạn..."></textarea></div>
+          <button class="btn btn--solid" type="submit">Gửi yêu cầu <span class="arrow">→</span></button>
+          <p class="form-note">✓ Cảm ơn bạn! Racons sẽ liên hệ trong vòng 24 giờ.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <div class="map">
+          <iframe title="Bản đồ" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://maps.google.com/maps?q=Ho%20Chi%20Minh%20City&z=13&output=embed"></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>

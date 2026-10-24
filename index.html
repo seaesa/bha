@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Racons — Kiến trúc · Nội thất · Xây dựng trọn gói</title>
+  <meta name="description" content="Racons - Thiết kế kiến trúc, nội thất, ngoại thất và xây nhà trọn gói.">
+  <link rel="icon" href="/assets/img/logo.svg">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body data-page="home" data-smooth data-header="transparent">
+  <div class="loader"><img class="loader__logo" src="/assets/img/logo.svg" alt="Racons"></div>
+  <div id="site-header"></div>
+
+  <main>
+    <!-- 1. VIDEO -->
+    <section class="hero-video" data-youtube="">
+      <div class="hero-video__media">
+        <div class="hero-video__poster" style="background-image:url('/assets/img/naraco-home.jpg')"></div>
+      </div>
+      <button class="sound-toggle" aria-label="Bật/tắt âm thanh">🔇</button>
+      <div class="container hero-video__content">
+        <div class="hero-video__bottom">
+          <div>
+            <h1 class="title-xl"><span class="split-line"><span>Kiến tạo</span></span><span class="split-line"><span>không gian sống</span></span></h1>
+            <p class="reveal reveal-d2">Thiết kế kiến trúc · Nội thất · Xây nhà trọn gói. Mỗi công trình là một câu chuyện riêng của gia chủ.</p>
+          </div>
+          <a href="#intro" class="scroll-cue">Cuộn<i></i></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. GIỚI THIỆU -->
+    <section class="section" id="intro">
+      <div class="container">
+        <div class="intro-grid">
+          <div>
+            <span class="eyebrow">Về Racons</span>
+            <p class="lead reveal" style="margin-top:24px">Đội ngũ kiến trúc sư, kỹ sư và nghệ nhân cùng chung một niềm tin: ngôi nhà đẹp là ngôi nhà được sống trọn vẹn.</p>
+            <a class="link-arrow reveal" href="/gioi-thieu/">Câu chuyện của chúng tôi →</a>
+          </div>
+          <p class="intro-statement">
+            Racons kết hợp <em>sự tinh tế của thiết kế</em> với <em>năng lực thi công trọn gói</em>, tạo nên những công trình
+            bền vững, giàu cảm xúc và mang đậm dấu ấn riêng — từ căn hộ nhỏ đến biệt thự nghỉ dưỡng.
+          </p>
+        </div>
+        <div class="stats">
+          <div class="stat"><strong data-count="12" data-suffix="+">0</strong><span>Năm kinh nghiệm</span></div>
+          <div class="stat"><strong data-count="650" data-suffix="+">0</strong><span>Công trình hoàn thiện</span></div>
+          <div class="stat"><strong data-count="80" data-suffix="+">0</strong><span>Kiến trúc sư & kỹ sư</span></div>
+          <div class="stat"><strong data-count="98" data-suffix="%">0</strong><span>Khách hàng hài lòng</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. DỰ ÁN THIẾT KẾ (cuộn kiểu HBA) -->
+    <section>
+      <div class="container featured-head section-head">
+        <div>
+          <span class="eyebrow">Dự án thiết kế</span>
+          <h2 class="title-lg">Dự án tiêu biểu</h2>
+        </div>
+        <a class="btn" href="/du-an/">Tất cả dự án <span class="arrow">→</span></a>
+      </div>
+      <div class="fp-stack" id="fp-stack"></div>
+    </section>
+
+    <!-- 4. DỰ ÁN THI CÔNG (gallery kiểu Mia) -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Dự án thi công</span>
+            <h2 class="title-lg">Công trình thực tế</h2>
+          </div>
+          <div class="filters" data-filter-group="#gallery">
+            <button class="filter-btn is-active" data-filter="all">Tất cả</button>
+            <button class="filter-btn" data-filter="villa">Villa - Biệt thự</button>
+            <button class="filter-btn" data-filter="nha-pho">Nhà phố</button>
+            <button class="filter-btn" data-filter="can-ho">Căn hộ</button>
+            <button class="filter-btn" data-filter="van-phong">Văn phòng</button>
+          </div>
+        </div>
+        <div class="gallery" id="gallery" data-limit="9"></div>
+        <div class="gallery-more"><a class="btn" href="/du-an/">Xem thêm công trình <span class="arrow">→</span></a></div>
+      </div>
+    </section>
+
+    <!-- 5. DỊCH VỤ -->
+    <section class="section services">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Dịch vụ chính</span>
+            <h2 class="title-lg">Từ ý tưởng đến chìa khoá trao tay</h2>
+          </div>
+          <p class="lead" style="max-width:440px;margin:0">Một đầu mối duy nhất cho toàn bộ hành trình xây dựng tổ ấm của bạn.</p>
+        </div>
+        <div class="service-list" id="service-list"></div>
+      </div>
+    </section>
+
+    <!-- 6. BLOG -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Kiến thức</span>
+            <h2 class="title-lg">Cẩm nang & cảm hứng</h2>
+          </div>
+          <a class="btn" href="/kien-thuc/">Xem tất cả <span class="arrow">→</span></a>
+        </div>
+        <div class="blog-grid" data-posts="0,3"></div>
+      </div>
+    </section>
+
+    <!-- 7. BÁO CHÍ -->
+    <section class="section press">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Báo chí</span>
+            <h2 class="title-lg">Báo chí nói về Racons</h2>
+          </div>
+        </div>
+      </div>
+      <div class="marquee">
+        <div class="marquee__track">
+          <span class="press-logo">Báo A</span><span class="press-logo">Tạp chí B</span><span class="press-logo">Báo C</span>
+          <span class="press-logo">Tạp chí D</span><span class="press-logo">Báo E</span><span class="press-logo">Tạp chí F</span>
+          <span class="press-logo">Báo G</span><span class="press-logo">Tạp chí H</span>
+          <span class="press-logo">Báo A</span><span class="press-logo">Tạp chí B</span><span class="press-logo">Báo C</span>
+          <span class="press-logo">Tạp chí D</span><span class="press-logo">Báo E</span><span class="press-logo">Tạp chí F</span>
+          <span class="press-logo">Báo G</span><span class="press-logo">Tạp chí H</span>
+        </div>
+      </div>
+      <div class="container">
+        <div class="press-grid">
+          <article class="press-card reveal">
+            <span class="press-card__src">Báo A · 09/2026</span>
+            <h3>Racons và xu hướng nhà phố "xanh" giữa lòng đô thị</h3>
+            <p>Những công trình nhà phố tích hợp cây xanh, thông gió tự nhiên đang được nhiều gia đình trẻ lựa chọn.</p>
+            <a class="link-arrow" href="#">Đọc bài viết →</a>
+          </article>
+          <article class="press-card reveal reveal-d1">
+            <span class="press-card__src">Báo B · 07/2026</span>
+            <h3>Naraco Home — Khi phong cách Indochine gặp khí hậu nhiệt đới</h3>
+            <p>Dự án nhà phố với mặt tiền vữa vân đá và mái ngói đỏ được giới chuyên môn đánh giá cao.</p>
+            <a class="link-arrow" href="#">Đọc bài viết →</a>
+          </article>
+          <article class="press-card reveal reveal-d2">
+            <span class="press-card__src">Báo C · 05/2026</span>
+            <h3>Xây nhà trọn gói: Minh bạch chi phí là chìa khoá</h3>
+            <p>Mô hình một đầu mối giúp chủ nhà tiết kiệm thời gian và kiểm soát ngân sách hiệu quả.</p>
+            <a class="link-arrow" href="#">Đọc bài viết →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta-band">
+      <div class="container">
+        <h2 class="title-lg">Sẵn sàng bắt đầu ngôi nhà mơ ước?</h2>
+        <p>Để lại thông tin, kiến trúc sư Racons sẽ liên hệ tư vấn miễn phí trong 24 giờ.</p>
+        <a class="btn" href="/lien-he/">Nhận tư vấn miễn phí <span class="arrow">→</span></a>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+# Thêm vào block server {} của Nginx
+location = /index.html { return 301 /; }
+location ~ ^/(gioi-thieu|dich-vu|san-pham|du-an|kien-thuc|lien-he)\.html$ { return 301 /$1/$is_args$args; }
+location / { try_files $uri $uri/ =404; }

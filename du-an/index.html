@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dự án — Racons</title>
+  <link rel="icon" href="/assets/img/logo.svg">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body data-page="du-an" data-header="transparent">
+  <div id="site-header"></div>
+
+  <main>
+    <section class="page-hero">
+      <div class="page-hero__bg" style="background-image:url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2200&q=75')"></div>
+      <div class="container">
+        <span class="eyebrow">Dự án</span>
+        <h1 class="title-xl">Công trình<br>của chúng tôi</h1>
+        <p>Villa, nhà phố, căn hộ và văn phòng — mỗi dự án là một lời giải riêng cho từng gia chủ.</p>
+        <div class="breadcrumb"><a href="/">Trang chủ</a> / Dự án</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div><span class="eyebrow">Danh mục</span><h2 class="title-lg">Tất cả dự án</h2></div>
+          <div class="filters" data-filter-group="#gallery">
+            <button class="filter-btn is-active" data-filter="all">Tất cả</button>
+            <button class="filter-btn" data-filter="villa">Villa - Biệt thự</button>
+            <button class="filter-btn" data-filter="nha-pho">Nhà phố</button>
+            <button class="filter-btn" data-filter="can-ho">Căn hộ</button>
+            <button class="filter-btn" data-filter="van-phong">Văn phòng</button>
+          </div>
+        </div>
+        <div class="gallery" id="gallery"></div>
+      </div>
+    </section>
+
+    <section class="section cta-band">
+      <div class="container">
+        <h2 class="title-lg">Dự án tiếp theo có thể là của bạn</h2>
+        <p>Chia sẻ ý tưởng, chúng tôi sẽ biến nó thành hiện thực.</p>
+        <a class="btn" href="/lien-he/">Bắt đầu dự án <span class="arrow">→</span></a>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>

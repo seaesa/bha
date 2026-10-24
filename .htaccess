@@ -1,0 +1,5 @@
+# Chuyển URL cũ dạng /du-an.html -> /du-an/ (Apache)
+RewriteEngine On
+RewriteRule ^index\.html$ / [R=301,L]
+RewriteRule ^(gioi-thieu|dich-vu|san-pham|du-an|kien-thuc|lien-he)\.html$ /$1/ [R=301,L,QSA]
+DirectoryIndex index.html

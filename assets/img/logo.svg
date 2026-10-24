@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 96" role="img" aria-label="Racons">
+  <rect x="26" y="6" width="44" height="60" rx="6" fill="#E62D2A" transform="rotate(7 48 36)"/>
+  <rect x="6" y="10" width="44" height="50" rx="6" fill="#4CB8B8" transform="rotate(-5 28 35)"/>
+  <rect x="2" y="50" width="26" height="40" rx="5" fill="#F7A21B" transform="rotate(-8 15 70)"/>
+  <rect x="20" y="58" width="48" height="32" rx="5" fill="#A6B23A" transform="rotate(4 44 74)"/>
+  <text x="8" y="80" font-family="'Comic Sans MS','Comic Sans',cursive" font-size="82" font-weight="700" fill="#2E1F33">R</text>
+  <text x="74" y="80" font-family="'Comic Sans MS','Comic Sans',cursive" font-size="64" font-weight="700" fill="#2E1F33">acons</text>
+</svg>
