@@ -17,13 +17,16 @@ window.RACONS = {
   featured: [
     { title: "Naraco Home", cat: "nha-pho", place: "TP. Hồ Chí Minh", year: 2026,
       style: "Phong cách Indochine", image: "/assets/img/naraco-home.jpg",
-      desc: "Nhà phố 4 tầng với mặt tiền vữa vân đá ấm, ban công cong mềm và mái ngói đỏ gợi nhớ phố cũ." },
+      desc: "Nhà phố 4 tầng với mặt tiền vữa vân đá ấm, ban công cong mềm và mái ngói đỏ gợi nhớ phố cũ.",
+      gallery: [img("1615529182904-14819c35db37", 1600), img("1600607687644-c7171b42498f", 1600)] },
     { title: "Villa Hồ Tràm", cat: "villa", place: "Bà Rịa - Vũng Tàu", year: 2025,
       style: "Phong cách hiện đại", image: img("1613490493576-7fde63acd811", 2200),
-      desc: "Biệt thự nghỉ dưỡng mở ra biển, hồ bơi tràn và không gian sống liền mạch trong – ngoài." },
+      desc: "Biệt thự nghỉ dưỡng mở ra biển, hồ bơi tràn và không gian sống liền mạch trong – ngoài.",
+      gallery: [img("1600607687939-ce8a6c25118c", 1600), img("1600566753190-17f0baa2a6c3", 1600)] },
     { title: "Penthouse Riverside", cat: "can-ho", place: "Thủ Đức", year: 2025,
       style: "Phong cách Minimalism", image: img("1600210492486-724fe5c67fb0", 2200),
-      desc: "Căn hộ áp mái 280m² với bảng màu trung tính, ánh sáng tự nhiên và nội thất may đo." },
+      desc: "Căn hộ áp mái 280m² với bảng màu trung tính, ánh sáng tự nhiên và nội thất may đo.",
+      gallery: [img("1618221195710-dd6b41faaea6", 1600), img("1505691938895-1758d7feb511", 1600)] },
   ],
 
   // Dự án thi công (gallery kiểu Mia Design Studio)
@@ -72,6 +75,14 @@ window.RACONS = {
     { title: "Ánh sáng tự nhiên trong thiết kế nhà ống", cat: "Kiến trúc", date: "29/08/2026",
       image: img("1600607687644-c7171b42498f", 900),
       excerpt: "Giếng trời, lam chắn nắng và vách kính — giải pháp cho nhà phố sâu và hẹp." },
+  ],
+
+  // Báo chí — thay tên báo / link thật
+  press: [
+    { title: "Racons và xu hướng nhà phố xanh giữa lòng đô thị", source: "Báo A", date: "09.2026", url: "#", image: img("1600585154340-be6161a56a0c", 800) },
+    { title: "Naraco Home: Khi Indochine gặp khí hậu nhiệt đới", source: "Tạp chí B", date: "07.2026", url: "#", image: "/assets/img/naraco-home.jpg" },
+    { title: "Xây nhà trọn gói: Minh bạch chi phí là chìa khoá", source: "Báo C", date: "05.2026", url: "#", image: img("1541888946425-d81bb19240f5", 800) },
+    { title: "Những kiến trúc sư trẻ định hình nhà ở Việt", source: "Tạp chí D", date: "02.2026", url: "#", image: img("1503387762-592deb58ef4e", 800) },
   ],
 
   products: [

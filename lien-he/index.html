@@ -7,11 +7,11 @@
   <link rel="icon" href="/assets/img/logo.svg">
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
-<body data-page="lien-he" data-header="transparent">
+<body data-page="lien-he">
   <div id="site-header"></div>
 
   <main>
-    <section class="page-hero" style="min-height:52vh">
+    <section class="page-hero" data-theme="dark" style="min-height:52vh">
       <div class="page-hero__bg" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2200&q=75')"></div>
       <div class="container">
         <span class="eyebrow">Liên hệ</span>
@@ -33,7 +33,7 @@
           </ul>
         </div>
 
-        <form class="form" data-demo>
+        <form data-demo>
           <h3 class="title-md" style="margin-bottom:24px">Gửi yêu cầu tư vấn</h3>
           <div class="form-row">
             <div class="field"><label for="name">Họ và tên *</label><input id="name" required></div>
@@ -59,7 +59,7 @@
             <div class="field"><label for="area">Diện tích (m²)</label><input id="area" type="number" min="0"></div>
           </div>
           <div class="field"><label for="msg">Nội dung</label><textarea id="msg" placeholder="Mô tả ngắn nhu cầu của bạn..."></textarea></div>
-          <button class="btn btn--solid" type="submit">Gửi yêu cầu <span class="arrow">→</span></button>
+          <button class="btn btn--solid" type="submit">Gửi yêu cầu </button>
           <p class="form-note">✓ Cảm ơn bạn! Racons sẽ liên hệ trong vòng 24 giờ.</p>
         </form>
       </div>

@@ -1,8 +1,8 @@
 /* ==========================================================
-   RACONS — main script
-   - Header / footer dùng chung (chèn bằng JS)
-   - Cuộn mượt (Lenis) cho trang có <body data-smooth>
-   - Hiệu ứng: reveal, dự án cuộn kiểu HBA, gallery lọc, hover ảnh dịch vụ
+   RACONS — main script (bố cục kiểu HBA)
+   - Header/menu/footer dùng chung, chèn bằng JS
+   - Cuộn mượt Lenis cho trang có <body data-smooth>
+   - Sticky gallery, signpost list, post slider, fullscreen links
    ========================================================== */
 (() => {
   const D = window.RACONS || {};
@@ -10,6 +10,7 @@
   const page = body.dataset.page || "";
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 
   const LOGO = `
   <svg viewBox="0 0 300 96" aria-label="Racons" role="img">
@@ -20,10 +21,12 @@
     <text x="8" y="80" font-family="'Comic Sans MS','Comic Sans',cursive" font-size="82" font-weight="700" fill="#2E1F33">R</text>
     <text class="logo-text" x="74" y="80" font-family="'Comic Sans MS','Comic Sans',cursive" font-size="64" font-weight="700">acons</text>
   </svg>`;
-  const CARET = `<svg class="caret" viewBox="0 0 10 10"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>`;
-  const ARROW = `<span class="arrow">→</span>`;
+  const CARET = `<svg class="caret" viewBox="0 0 10 10"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>`;
+  const SEARCH = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="13" cy="10" r="7.5"/><path d="M7.6 15.4 2 21"/></svg>`;
+  const ARR_L = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M9 2 4 7l5 5"/></svg>`;
+  const ARR_R = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="m5 2 5 5-5 5"/></svg>`;
 
-  /* ---------------- Header ---------------- */
+  /* ---------------- Menu data ---------------- */
   const MENU = [
     { key: "gioi-thieu", label: "Giới thiệu", href: "/gioi-thieu/" },
     { key: "dich-vu", label: "Dịch vụ", href: "/dich-vu/", sub: [
@@ -43,227 +46,282 @@
     { key: "lien-he", label: "Liên hệ", href: "/lien-he/" },
   ];
 
+  /* ---------------- Header ---------------- */
   const headerEl = $("#site-header");
   if (headerEl) {
     headerEl.outerHTML = `
     <header class="site-header" id="header">
-      <div class="container">
+      <div class="hd">
         <a class="logo" href="/" aria-label="Racons - Trang chủ">${LOGO}</a>
         <nav class="nav" aria-label="Menu chính">
           <ul>
             ${MENU.map(m => `
-              <li class="nav-item${m.sub ? " has-sub" : ""}">
+              <li class="nav-item">
                 <a class="nav-link${m.key === page ? " is-active" : ""}" href="${m.href}">${m.label}${m.sub ? CARET : ""}</a>
-                ${m.sub ? `<ul class="submenu">${m.sub.map(([t, h]) => `<li><a href="${h}">${t}</a></li>`).join("")}</ul>` : ""}
+                ${m.sub ? `<div class="submenu">${m.sub.map(([t, h]) => `<a href="${h}">${t}</a>`).join("")}</div>` : ""}
               </li>`).join("")}
           </ul>
         </nav>
-        <a class="header-cta" href="tel:0900000000"><span class="dot"></span>0900 000 000</a>
-        <button class="burger" aria-label="Mở menu"><span></span><span></span><span></span></button>
       </div>
-    </header>`;
+    </header>
+    <div class="hd-fixed" id="hd-fixed">
+      <button class="menu-btn" aria-label="Mở menu">Menu</button>
+      <button class="search-btn" aria-label="Tìm kiếm">${SEARCH}</button>
+      <form class="search-pop" action="/kien-thuc/" method="get" role="search">
+        <input type="text" name="s" placeholder="Nhập từ khoá tìm kiếm" aria-label="Tìm kiếm">
+        <button type="submit" aria-label="Tìm">${SEARCH}</button>
+      </form>
+    </div>
+    <div class="menu-overlay" aria-hidden="true">
+      <div class="menu-overlay__nav">
+        <ul class="mo-list">
+          ${MENU.map(m => `
+            <li class="mo-item">
+              <a class="mo-link" href="${m.href}" ${m.sub ? "data-toggle" : ""}>${m.label}${m.sub ? `<span class="mo-toggle">+</span>` : ""}</a>
+              ${m.sub ? `<div class="mo-sub"><div><ul>
+                <li><a href="${m.href}">Tất cả ${m.label.toLowerCase()}</a></li>
+                ${m.sub.map(([t, h]) => `<li><a href="${h}">${t}</a></li>`).join("")}
+              </ul></div></div>` : ""}
+            </li>`).join("")}
+        </ul>
+        <div class="menu-overlay__meta">
+          <div><span class="label">Hotline</span><br><a href="tel:0900000000">0900 000 000</a></div>
+          <div><span class="label">Email</span><br><a href="mailto:info@racons.vn">info@racons.vn</a></div>
+        </div>
+      </div>
+      <div class="menu-overlay__img"><img src="/assets/img/naraco-home.jpg" alt=""></div>
+    </div>`;
   }
   const header = $("#header");
+  const hdFixed = $("#hd-fixed");
 
-  /* ---------------- Footer ---------------- */
+  // Search: bấm icon mở ô tìm kiếm
+  $(".search-btn")?.addEventListener("click", () => {
+    body.classList.toggle("search-open");
+    if (body.classList.contains("search-open")) setTimeout(() => $(".search-pop input")?.focus(), 200);
+  });
+  document.addEventListener("click", e => { if (!e.target.closest("#hd-fixed")) body.classList.remove("search-open"); });
+
+  /* ---------------- Footer (+ fullscreen links trên trang chủ do HTML đặt) ---------------- */
   const footerEl = $("#site-footer");
   if (footerEl) {
     footerEl.outerHTML = `
-    <footer class="site-footer">
-      <div class="brand-bar"><span></span><span></span><span></span><span></span></div>
-      <div class="container">
-        <div class="footer-top">
-          <div>
-            <a class="footer-logo" href="/">${LOGO.replace('class="logo-text"', 'class="logo-text" fill="#2E1F33"')}</a>
-            <p style="margin-top:22px;max-width:340px">Racons — Thiết kế kiến trúc, nội thất và xây dựng trọn gói. Kiến tạo không gian sống mang dấu ấn riêng.</p>
-            <div class="socials">
-              <a href="#" aria-label="Facebook">f</a><a href="#" aria-label="Instagram">ig</a>
-              <a href="#" aria-label="YouTube">yt</a><a href="#" aria-label="TikTok">tt</a>
-            </div>
-          </div>
-          <div>
-            <h4>Dịch vụ</h4>
-            <ul>${MENU[1].sub.map(([t, h]) => `<li><a href="${h}">${t}</a></li>`).join("")}</ul>
-          </div>
-          <div>
-            <h4>Dự án</h4>
-            <ul>${MENU[3].sub.map(([t, h]) => `<li><a href="${h}">${t}</a></li>`).join("")}</ul>
-          </div>
-          <div>
-            <h4>Liên hệ</h4>
-            <ul>
-              <li>123 Đường ABC, Phường XYZ, TP. Hồ Chí Minh</li>
-              <li><a href="tel:0900000000">Hotline: 0900 000 000</a></li>
-              <li><a href="mailto:info@racons.vn">info@racons.vn</a></li>
-              <li>T2 – T7: 8:00 – 17:30</li>
-            </ul>
+    <div class="brand-bar"><span></span><span></span><span></span><span></span></div>
+    <footer class="site-footer" data-theme="dark">
+      <div class="ft">
+        <div class="ft__logo">
+          <a class="logo" href="/">${LOGO}</a>
+          <p>Thiết kế kiến trúc, nội thất và xây dựng trọn gói. Racons MEP · Racons Solar · Racons Power.</p>
+        </div>
+        <div class="ft__offices">
+          <div class="ft__col"><h4>Văn phòng</h4><div class="ft__big">123 Đường ABC,<br>Phường XYZ,<br>TP. Hồ Chí Minh</div></div>
+          <div class="ft__col"><h4>Hotline</h4><div class="ft__big"><a href="tel:0900000000">0900 000 000</a><br><a href="mailto:info@racons.vn">info@racons.vn</a></div></div>
+          <div class="ft__col"><h4>Dự án</h4><div class="ft__big">${MENU[3].sub.map(([t, h]) => `<a href="${h}">${t}</a>`).join("<br>")}</div></div>
+        </div>
+        <div class="ft__hr"></div>
+        <div class="ft__bottom">
+          <form class="ft__form" data-demo>
+            <div class="ft__cap">Nhận bản tin</div>
+            <input type="text" placeholder="Họ tên*" required>
+            <input type="email" placeholder="Email*" required>
+            <button class="btn" type="submit">Đăng ký</button>
+            <p class="form-note">✓ Cảm ơn bạn đã đăng ký!</p>
+          </form>
+          <div><div class="ft__cap">Liên hệ</div><a class="ft__big" href="/lien-he/">Yêu cầu tư vấn</a></div>
+          <div><div class="ft__cap">Theo dõi</div>
+            <div class="ft__social"><a href="#">Facebook</a><a href="#">Youtube</a><a href="#">Instagram</a><a href="#">Tiktok</a><a href="#">Zalo</a><a href="#">Pinterest</a></div>
           </div>
         </div>
-        <div class="footer-bottom">
-          <span>© ${new Date().getFullYear()} Racons. All rights reserved.</span>
-          <span>Racons MEP · Racons Solar · Racons Power</span>
-        </div>
+        <div class="ft__copy">© ${new Date().getFullYear()} Racons. Bảo lưu mọi quyền. &nbsp;|&nbsp; Chính sách bảo mật</div>
+        <button class="to-top" aria-label="Lên đầu trang"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 11l6-6 6 6"/></svg></button>
       </div>
     </footer>`;
   }
 
-  /* ---------------- Mobile menu ---------------- */
-  const burger = $(".burger");
-  burger?.addEventListener("click", () => {
-    body.classList.toggle("menu-open");
-    header?.classList.remove("is-hidden");
-    body.classList.contains("menu-open") ? lenis?.stop() : lenis?.start();
-  });
-  $$(".nav-item.has-sub > .nav-link").forEach(a => a.addEventListener("click", e => {
-    if (window.matchMedia("(max-width:1080px)").matches) {
-      e.preventDefault();
-      a.parentElement.classList.toggle("is-open");
-    }
-  }));
-  $$(".submenu a").forEach(a => a.addEventListener("click", () => { body.classList.remove("menu-open"); lenis?.start(); }));
-
   /* ---------------- Smooth scroll (Lenis) ---------------- */
   let lenis = null;
-  const hasGSAP = !!(window.gsap && window.ScrollTrigger);
-  if (hasGSAP) gsap.registerPlugin(ScrollTrigger);
-
   if (body.hasAttribute("data-smooth") && window.Lenis && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    lenis = new Lenis({ duration: 1.25, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
-    if (hasGSAP) {
-      lenis.on("scroll", ScrollTrigger.update);
-      gsap.ticker.add(t => lenis.raf(t * 1000));
-      gsap.ticker.lagSmoothing(0);
-    } else {
-      const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
-      requestAnimationFrame(raf);
-    }
-    // anchor links
-    $$('a[href^="#"]').forEach(a => a.addEventListener("click", e => {
-      const t = $(a.getAttribute("href"));
-      if (t) { e.preventDefault(); lenis.scrollTo(t, { offset: -70 }); }
-    }));
+    lenis = new Lenis({ duration: 1.3, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+    const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
   }
+  const scrollToEl = (el, offset = 0) => lenis ? lenis.scrollTo(el, { offset }) : el.scrollIntoView({ behavior: "smooth" });
+  $$('a[href^="#"]').forEach(a => a.addEventListener("click", e => {
+    const t = a.getAttribute("href").length > 1 && $(a.getAttribute("href"));
+    if (t) { e.preventDefault(); scrollToEl(t); }
+  }));
+  $(".to-top")?.addEventListener("click", () => lenis ? lenis.scrollTo(0) : scrollTo({ top: 0, behavior: "smooth" }));
 
-  /* ---------------- Header behaviour ---------------- */
-  const transparentTop = body.dataset.header === "transparent";
-  let lastY = 0;
-  const onScroll = () => {
-    const y = window.scrollY;
-    if (header) {
-      header.classList.toggle("is-transparent", transparentTop && y < window.innerHeight * 0.6);
-      header.classList.toggle("is-hidden", y > lastY && y > 300 && !body.classList.contains("menu-open"));
-    }
-    lastY = y;
+  /* ---------------- Fullscreen menu ---------------- */
+  const menuBtn = $(".menu-btn");
+  const setMenu = open => {
+    body.classList.toggle("menu-open", open);
+    menuBtn.textContent = open ? "Đóng" : "Menu";
+    $(".menu-overlay").setAttribute("aria-hidden", !open);
+    open ? lenis?.stop() : lenis?.start();
+    if (!open) $$(".mo-item.is-open").forEach(i => i.classList.remove("is-open"));
   };
-  onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
+  menuBtn?.addEventListener("click", () => setMenu(!body.classList.contains("menu-open")));
+  $$(".mo-link[data-toggle]").forEach(a => a.addEventListener("click", e => {
+    e.preventDefault();
+    a.parentElement.classList.toggle("is-open");
+  }));
+  $$(".menu-overlay a:not([data-toggle])").forEach(a => a.addEventListener("click", () => setMenu(false)));
+  addEventListener("keydown", e => e.key === "Escape" && setMenu(false));
 
-  /* ---------------- Render: featured projects (HBA style) ---------------- */
-  const fpStack = $("#fp-stack");
-  if (fpStack && D.featured) {
-    fpStack.innerHTML = D.featured.map((p, i) => `
-      <article class="fp-panel">
-        <div class="fp-panel__inner">
-          <div class="fp-panel__img"><img src="${p.image}" alt="${p.title}" loading="${i ? "lazy" : "eager"}"></div>
-          <div class="fp-panel__shade"></div>
-          <div class="container fp-panel__caption">
-            <div class="fp-panel__num">0${i + 1}</div>
-            <div>
-              <div class="fp-panel__meta">${D.categories[p.cat]} · ${p.place} · ${p.year}</div>
-              <h3 class="fp-panel__title">${p.title}</h3>
-              <p class="fp-panel__desc">${p.style} — ${p.desc}</p>
-            </div>
-            <a class="btn" href="/du-an/?cat=${p.cat}">Xem dự án ${ARROW}</a>
-          </div>
-        </div>
-      </article>`).join("");
+  /* ---------------- Header: collapse + màu theo nền ---------------- */
+  // Như HBA: header (logo + menu) trượt lên theo lượng cuộn và ẩn hẳn; MENU hiện dần ở góc phải
+  const darkSections = () => $$('[data-theme="dark"]');
+  const updateHeader = () => {
+    if (!header) return;
+    const y = Math.max(0, scrollY);
+    const hh = header.offsetHeight + 12;
+    header.style.transform = `translate3d(0, ${-Math.min(y * 0.22, hh).toFixed(1)}px, 0)`;
+    const mo = clamp((y - 150) / 300);
+    menuBtn.style.opacity = mo.toFixed(3);
+    menuBtn.classList.toggle("is-on", mo > 0.4);
+    const probe = 42; // giữa header
+    const onDark = darkSections().some(s => { const r = s.getBoundingClientRect(); return r.top <= probe && r.bottom > probe; });
+    header.classList.toggle("on-dark", onDark);
+    hdFixed.classList.toggle("on-dark", onDark);
+  };
 
-    if (hasGSAP) {
-      const panels = $$(".fp-panel", fpStack);
-      panels.forEach((panel, i) => {
-        // ảnh zoom nhẹ khi panel đi vào
-        gsap.fromTo($("img", panel), { scale: 1.2 }, {
-          scale: 1, ease: "none",
-          scrollTrigger: { trigger: panel, start: "top bottom", end: "top top", scrub: true },
-        });
-        // panel trước thu nhỏ + tối dần khi panel sau trượt lên
-        const next = panels[i + 1];
-        if (next) {
-          gsap.to($(".fp-panel__inner", panel), {
-            scale: 0.9, borderRadius: 16, ease: "none",
-            scrollTrigger: { trigger: next, start: "top bottom", end: "top top", scrub: true },
-          });
-          gsap.to($(".fp-panel__shade", panel), {
-            opacity: 0.6, ease: "none",
-            scrollTrigger: { trigger: next, start: "top bottom", end: "top top", scrub: true },
-          });
-        }
+  /* ---------------- Hero: video + tiêu đề hiện từng chữ ---------------- */
+  const hero = $(".hero");
+  if (hero) {
+    const id = hero.dataset.youtube || D.youtubeId;
+    const frame = document.createElement("iframe");
+    frame.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&enablejsapi=1`;
+    frame.allow = "autoplay; encrypted-media";
+    frame.title = "Racons video";
+    frame.addEventListener("load", () => setTimeout(() => hero.classList.add("is-playing"), 1600));
+    $(".hero__media", hero).appendChild(frame);
+
+    const st = $(".sound-toggle", hero);
+    let muted = true;
+    st?.addEventListener("click", () => {
+      muted = !muted;
+      frame.contentWindow.postMessage(JSON.stringify({ event: "command", func: muted ? "mute" : "unMute", args: [] }), "*");
+      st.textContent = muted ? "Bật âm thanh" : "Tắt âm thanh";
+    });
+
+    const title = $(".hero__title", hero);
+    if (title) {
+      let n = 0;
+      $$(".ln", title).forEach(ln => {
+        ln.innerHTML = ln.textContent.trim().split(/\s+/).map(w => `<span class="w" style="transition-delay:${(0.35 + n++ * 0.22).toFixed(2)}s">${w}</span>`).join(" ");
       });
     }
   }
 
-  /* ---------------- Render: gallery (Mia style) ---------------- */
+  /* ---------------- Sticky gallery: 3 dự án thiết kế ---------------- */
+  const sgWrap = $("#featured");
+  if (sgWrap && D.featured) {
+    sgWrap.innerHTML = D.featured.map(p => `
+      <section class="sg" data-theme="dark">
+        <div class="sg__bg"><img src="${p.image}" alt="${p.title}"></div>
+        <div class="sg__content">
+          <div class="sg__bar">
+            <div class="sg__grad"></div>
+            <div class="sg__left">
+              <h3 class="sg__title">${p.title}</h3>
+              <a class="btn" href="/du-an/?cat=${p.cat}">Xem dự án</a>
+            </div>
+            <div class="sg__meta">
+              <span>Racons Design</span>
+              <span>${p.style}</span>
+              <span>${p.place}</span>
+              <span>${p.year}</span>
+            </div>
+          </div>
+        </div>
+        <div class="sg__gallery">${(p.gallery || []).map(g => `<figure class="sg__slide" style="margin-top:0"><img src="${g}" alt="${p.title}" loading="lazy"></figure>`).join("")}</div>
+      </section>`).join("");
+  }
+  const sgs = $$(".sg").map(el => ({ el, bg: $(".sg__bg img", el), grad: $(".sg__grad", el) }));
+
+  /* ---------------- Gallery: dự án thi công (kiểu Mia) ---------------- */
   const gallery = $("#gallery");
   if (gallery && D.projects) {
     const limit = +gallery.dataset.limit || D.projects.length;
     gallery.innerHTML = D.projects.slice(0, limit).map(p => `
       <a class="g-item ${p.size}" data-cat="${p.cat}" href="/du-an/?cat=${p.cat}">
         <img src="${p.image}" alt="${p.title}" loading="lazy">
-        <span class="g-item__tag">${D.categories[p.cat]}</span>
         <div class="g-item__info"><span>Thi công · ${D.categories[p.cat]}</span><h3>${p.title}</h3></div>
       </a>`).join("");
   }
-
-  // Filter buttons (dùng chung cho gallery & sản phẩm)
   $$("[data-filter-group]").forEach(group => {
     const target = $(group.dataset.filterGroup);
     const apply = cat => {
       $$(".filter-btn", group).forEach(b => b.classList.toggle("is-active", b.dataset.filter === cat));
       $$("[data-cat]", target).forEach(it => it.classList.toggle("is-hidden", cat !== "all" && it.dataset.cat !== cat));
-      if (hasGSAP) ScrollTrigger.refresh();
+      lenis?.resize();
     };
-    group.addEventListener("click", e => {
-      const b = e.target.closest(".filter-btn");
-      if (b) apply(b.dataset.filter);
-    });
-    const qCat = new URLSearchParams(location.search).get("cat");
-    if (qCat && $(`[data-filter="${qCat}"]`, group)) apply(qCat);
+    group.addEventListener("click", e => { const b = e.target.closest(".filter-btn"); if (b) apply(b.dataset.filter); });
+    const q = new URLSearchParams(location.search).get("cat");
+    if (q && $(`[data-filter="${q}"]`, group)) apply(q);
   });
 
-  /* ---------------- Render: services list with cursor image ---------------- */
-  const svcList = $("#service-list");
-  if (svcList && D.services) {
-    svcList.innerHTML = D.services.map((s, i) => `
-      <a class="service-row" href="/dich-vu/#${s.id}" data-img="${s.image}">
-        <span class="service-row__num">0${i + 1}</span>
-        <h3>${s.title}</h3>
-        <p>${s.desc}</p>
-        <span class="service-row__arrow">→</span>
-      </a>`).join("");
-
-    const reveal = document.createElement("div");
-    reveal.className = "hover-reveal";
-    reveal.innerHTML = `<img alt="">`;
-    body.appendChild(reveal);
-    const rImg = $("img", reveal);
-    let mx = 0, my = 0, rx = 0, ry = 0;
-    window.addEventListener("mousemove", e => { mx = e.clientX; my = e.clientY; });
-    (function loop() {
-      rx += (mx - rx) * 0.15; ry += (my - ry) * 0.15;
-      reveal.style.translate = `${rx + 30}px ${ry - 110}px`;
-      requestAnimationFrame(loop);
-    })();
-    $$(".service-row", svcList).forEach(r => {
-      r.addEventListener("mouseenter", () => { rImg.src = r.dataset.img; reveal.classList.add("is-visible"); });
-      r.addEventListener("mouseleave", () => reveal.classList.remove("is-visible"));
-    });
+  /* ---------------- Signpost list: dịch vụ ---------------- */
+  const sp = $("#signpost");
+  if (sp && D.services) {
+    sp.innerHTML = `
+      <div class="sp__label label">Dịch vụ</div>
+      <nav class="sp__list">${D.services.map((s, i) => `<a href="/dich-vu/#${s.id}" data-i="${i}" class="${i ? "" : "is-active"}">${s.title}</a>`).join("")}</nav>
+      <div class="sp__detail"><p>${D.services[0].desc}</p><a class="btn" href="/dich-vu/#${D.services[0].id}">Xem dịch vụ</a></div>
+      <div class="sp__media">${D.services.map((s, i) => `<img src="${s.image.replace("w=800", "w=1000")}" alt="${s.title}" class="${i ? "" : "is-active"}">`).join("")}</div>`;
+    const links = $$(".sp__list a", sp), imgs = $$(".sp__media img", sp), p = $(".sp__detail p", sp), btn = $(".sp__detail .btn", sp);
+    const activate = i => {
+      links.forEach((l, k) => l.classList.toggle("is-active", k === i));
+      imgs.forEach((im, k) => im.classList.toggle("is-active", k === i));
+      p.style.opacity = 0;
+      setTimeout(() => { p.textContent = D.services[i].desc; btn.href = `/dich-vu/#${D.services[i].id}`; p.style.opacity = 1; }, 180);
+    };
+    links.forEach((l, i) => l.addEventListener("mouseenter", () => activate(i)));
   }
 
-  /* ---------------- Render: blog cards ---------------- */
+  /* ---------------- Post sliders ---------------- */
+  const cardPost = p => `
+    <a class="ps__card" href="/kien-thuc/">
+      <div class="ph"><img src="${p.image}" alt="" loading="lazy"></div>
+      <div class="ps__row"><span>${p.cat}</span><time>${p.date}</time></div>
+      <h3>${p.title}</h3>
+    </a>`;
+  const cardPress = p => `
+    <a class="ps__card" href="${p.url}">
+      <div class="ph"><img src="${p.image}" alt="" loading="lazy"></div>
+      <div class="ps__row"><span>${p.source}</span><time>${p.date}</time></div>
+      <h3>${p.title}</h3>
+    </a>`;
+  $$("[data-slider]").forEach(ps => {
+    const track = $(".ps__track", ps);
+    const type = ps.dataset.slider;
+    if (type === "posts") track.innerHTML = D.posts.map(cardPost).join("");
+    if (type === "press") track.innerHTML = D.press.map(cardPress).join("");
+    const [prev, next] = $$(".ps__arrows button", ps);
+    const bar = $(".ps__bar i", ps);
+    const step = () => ($(".ps__card", track)?.offsetWidth || 300) + parseFloat(getComputedStyle(track).columnGap || 0);
+    prev.innerHTML = ARR_L; next.innerHTML = ARR_R;
+    prev.addEventListener("click", () => track.scrollBy({ left: -step() }));
+    next.addEventListener("click", () => track.scrollBy({ left: step() }));
+    const sync = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      const ratio = track.clientWidth / track.scrollWidth;
+      bar.style.width = ratio * 100 + "%";
+      bar.style.left = (max ? track.scrollLeft / max : 0) * (1 - ratio) * 100 + "%";
+      prev.disabled = track.scrollLeft < 4;
+      next.disabled = track.scrollLeft > max - 4;
+    };
+    track.addEventListener("scroll", sync, { passive: true });
+    addEventListener("resize", sync);
+    sync();
+  });
+
+  /* ---------------- Blog grid / products (trang con) ---------------- */
   const postCard = p => `
     <a class="post-card reveal" href="/kien-thuc/">
-      <div class="post-card__img"><img src="${p.image}" alt="${p.title}" loading="lazy"><span class="post-card__cat">${p.cat}</span></div>
-      <div class="post-card__meta">${p.date} · ${p.cat}</div>
+      <div class="post-card__img"><img src="${p.image}" alt="" loading="lazy"></div>
+      <div class="post-card__meta"><span>${p.cat}</span><span>${p.date}</span></div>
       <h3>${p.title}</h3>
       <p>${p.excerpt}</p>
     </a>`;
@@ -271,108 +329,80 @@
     const [from, to] = el.dataset.posts.split(",").map(Number);
     el.innerHTML = D.posts.slice(from, to).map(postCard).join("");
   });
-
-  /* ---------------- Render: products ---------------- */
   const products = $("#products");
   if (products && D.products) {
     products.innerHTML = D.products.map(p => `
       <a class="product-card" data-cat="${p.cat}" href="/lien-he/">
         <div class="product-card__img"><img src="${p.image}" alt="${p.name}" loading="lazy">${p.badge ? `<span class="product-card__badge">${p.badge}</span>` : ""}</div>
-        <h3>${p.name}</h3>
         <div class="product-card__cat">${p.cat}</div>
+        <h3>${p.name}</h3>
         <div class="product-card__price">${p.price}</div>
       </a>`).join("");
   }
 
-  /* ---------------- YouTube background video ---------------- */
-  const hv = $(".hero-video");
-  if (hv) {
-    const id = hv.dataset.youtube || D.youtubeId;
-    const frame = document.createElement("iframe");
-    frame.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&enablejsapi=1`;
-    frame.allow = "autoplay; encrypted-media";
-    frame.title = "Racons video";
-    frame.addEventListener("load", () => setTimeout(() => hv.classList.add("is-playing"), 1800));
-    $(".hero-video__media", hv).appendChild(frame);
-
-    const st = $(".sound-toggle", hv);
-    let muted = true;
-    st?.addEventListener("click", () => {
-      muted = !muted;
-      frame.contentWindow.postMessage(JSON.stringify({ event: "command", func: muted ? "mute" : "unMute", args: [] }), "*");
-      st.textContent = muted ? "🔇" : "🔊";
-    });
-  }
-
-  /* ---------------- Intro: word-by-word highlight ---------------- */
-  const statement = $(".intro-statement");
-  if (statement) {
-    const walk = node => {
-      [...node.childNodes].forEach(n => {
-        if (n.nodeType === 3) {
-          const frag = document.createDocumentFragment();
-          n.textContent.split(/(\s+)/).forEach(w => {
-            if (!w.trim()) return frag.appendChild(document.createTextNode(w));
-            const s = document.createElement("span"); s.className = "word"; s.textContent = w; frag.appendChild(s);
-          });
-          n.replaceWith(frag);
-        } else if (n.nodeType === 1) walk(n);
-      });
-    };
-    walk(statement);
-    const words = $$(".word", statement);
-    const update = () => {
-      const r = statement.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const p = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (r.height + vh * 0.4)));
-      const lit = Math.floor(p * words.length * 1.05);
-      words.forEach((w, i) => w.style.opacity = i < lit ? 1 : 0.15);
-    };
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-  }
-
-  /* ---------------- Parallax for [data-parallax] (GSAP pages) ---------------- */
-  if (hasGSAP) {
-    $$("[data-parallax]").forEach(el => {
-      gsap.fromTo(el, { yPercent: -8 }, { yPercent: 8, ease: "none",
-        scrollTrigger: { trigger: el.parentElement, start: "top bottom", end: "bottom top", scrub: true } });
-    });
-  }
-
-  /* ---------------- Count-up numbers ---------------- */
-  const counters = $$("[data-count]");
+  /* ---------------- Count-up ---------------- */
   const io2 = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return;
-    const el = e.target, end = +el.dataset.count, suf = el.dataset.suffix || "";
-    const t0 = performance.now();
-    const tick = t => {
-      const k = Math.min(1, (t - t0) / 1600);
-      el.textContent = Math.round(end * (1 - Math.pow(1 - k, 3))) + suf;
-      if (k < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-    io2.unobserve(el);
-  }), { threshold: 0.6 });
-  counters.forEach(c => io2.observe(c));
+    const el = e.target, end = +el.dataset.count, suf = el.dataset.suffix || "", t0 = performance.now();
+    const tick = t => { const k = Math.min(1, (t - t0) / 1600); el.textContent = Math.round(end * (1 - Math.pow(1 - k, 3))) + suf; if (k < 1) requestAnimationFrame(tick); };
+    requestAnimationFrame(tick); io2.unobserve(el);
+  }), { threshold: .6 });
+  $$("[data-count]").forEach(c => io2.observe(c));
 
-  /* ---------------- Reveal on scroll ---------------- */
+  /* ---------------- Reveal ---------------- */
   const io = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
-  }), { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+  }), { threshold: .12, rootMargin: "0px 0px -40px 0px" });
   $$(".reveal, .split-line").forEach(el => io.observe(el));
 
-  /* ---------------- Contact form (demo) ---------------- */
+  /* ---------------- Scroll-driven effects (1 vòng rAF) ---------------- */
+  const speeds = $$("[data-speed]");
+  const parallaxBgs = $$(".page-hero__bg, .fl__bg");
+  let ticking = false;
+  const frame = () => {
+    ticking = false;
+    const vh = innerHeight;
+    updateHeader();
+    // sticky gallery (như HBA): ảnh chính mờ dần theo lượng cuộn (~1.6 màn hình),
+    // gradient dưới chữ tắt dần khi gần hết section
+    sgs.forEach(({ el, bg, grad }) => {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < -50 || r.top > vh + 50) return;
+      const p = Math.max(0, -r.top / vh);
+      bg.style.opacity = clamp(1 - p * 0.624).toFixed(3);
+      if (grad) grad.style.opacity = clamp((r.bottom - vh) / (vh * 0.4)).toFixed(3);
+    });
+    // parallax nhẹ cho ảnh
+    speeds.forEach(el => {
+      const r = el.parentElement.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > vh + 200) return;
+      const c = (r.top + r.height / 2 - vh / 2) / vh;
+      el.style.transform = `translate3d(0, ${(c * parseFloat(el.dataset.speed) * 100).toFixed(1)}px, 0) scale(1.12)`;
+    });
+    parallaxBgs.forEach(el => {
+      const r = el.parentElement.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > vh) return;
+      el.style.transform = `translate3d(0, ${(-r.top * 0.18).toFixed(1)}px, 0)`;
+    });
+  };
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll);
+  frame();
+
+  /* ---------------- Forms (demo) ---------------- */
   $$("form[data-demo]").forEach(f => f.addEventListener("submit", e => {
-    e.preventDefault();
-    $(".form-note", f)?.classList.add("is-visible");
-    f.reset();
+    e.preventDefault(); $(".form-note", f)?.classList.add("is-visible"); f.reset();
   }));
 
   /* ---------------- Loader ---------------- */
   const loader = $(".loader");
-  const done = () => { loader?.classList.add("is-done"); hasGSAP && ScrollTrigger.refresh(); };
-  if (document.readyState === "complete") setTimeout(done, 300);
-  else window.addEventListener("load", () => setTimeout(done, 300));
-  setTimeout(done, 3500); // tránh treo nếu ảnh/video tải chậm
+  const done = () => {
+    loader?.classList.add("is-done");
+    $(".hero__title")?.classList.add("is-in");
+    lenis?.resize(); frame();
+  };
+  if (document.readyState === "complete") setTimeout(done, 200);
+  else addEventListener("load", () => setTimeout(done, 200));
+  setTimeout(done, 3000);
 })();
