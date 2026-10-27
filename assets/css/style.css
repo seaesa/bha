@@ -1,6 +1,32 @@
 /* ==========================================================
    RACONS — bố cục theo phong cách HBA, màu theo logo Racons
    ========================================================== */
+
+/* Font Comic Sans bản Việt hoá (SVN / VNF).
+   Comic Sans MS gốc thiếu dấu tiếng Việt (ơ, ư, ạ, ế...) nên chữ bị lẫn font.
+   Trình duyệt dùng font đã cài trên máy nếu có (local), nếu không sẽ tải file
+   trong /assets/fonts/ — chép file font vào đó để site hiển thị đúng trên mọi thiết bị. */
+@font-face {
+  font-family: "Racons Comic";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: local("SVN-Comic Sans MS"), local("SVN Comic Sans MS"), local("SVN-ComicSansMS"),
+       local("VNF-Comic Sans MS"), local("VNF Comic Sans MS"), local("VNF-ComicSansMS"),
+       url("/assets/fonts/SVN-ComicSansMS.woff2") format("woff2"),
+       url("/assets/fonts/SVN-ComicSansMS.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Racons Comic";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: local("SVN-Comic Sans MS Bold"), local("SVN Comic Sans MS Bold"), local("SVN-ComicSansMS-Bold"),
+       local("VNF-Comic Sans MS Bold"), local("VNF Comic Sans MS Bold"), local("VNF-ComicSansMS-Bold"),
+       url("/assets/fonts/SVN-ComicSansMS-Bold.woff2") format("woff2"),
+       url("/assets/fonts/SVN-ComicSansMS-Bold.ttf") format("truetype");
+}
+
 :root {
   /* màu logo */
   --red: #E62D2A;
@@ -18,7 +44,7 @@
   --white: #FBFBF9;
   --line: rgba(46, 31, 51, .2);
 
-  --font: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue", cursive;
+  --font: "Racons Comic", "SVN-Comic Sans MS", "VNF Comic Sans MS", "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive;
   --gutter: clamp(16px, 2.45vw, 35px);
   --col: calc((100vw - var(--gutter) * 2) / 12);
   --header-h: 84px;
@@ -330,6 +356,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 .ps__row { display: flex; justify-content: space-between; gap: 12px; margin-top: 22px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
 .ps__row time { color: var(--ink-soft); }
 .ps__card h3 { font-size: clamp(20px, 1.85vw, 26px); line-height: 1.18; margin-top: 18px; }
+/* thẻ đội ngũ: chân dung đen trắng, tên + chức danh cùng cỡ chữ */
+.ps__card--team .ph { aspect-ratio: 441 / 607; }
+.ps__card--team img { filter: grayscale(1) contrast(1.05); }
+.ps__card--team h3 { margin-top: 14px; line-height: 1.3; }
 .ps__bar { position: relative; height: 1px; background: var(--line); margin-top: 60px; }
 .ps__bar i { position: absolute; top: -1px; height: 3px; left: 0; width: 20%; background: var(--ink); transition: left .3s, width .3s; }
 @media (max-width: 960px) {

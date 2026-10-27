@@ -85,6 +85,15 @@ window.RACONS = {
     { title: "Những kiến trúc sư trẻ định hình nhà ở Việt", source: "Tạp chí D", date: "02.2026", url: "#", image: img("1503387762-592deb58ef4e", 800) },
   ],
 
+  // Đội ngũ — ảnh & tên minh hoạ, thay bằng ảnh chân dung / tên thật
+  team: [
+    { name: "KTS. Nguyễn Văn A", role: "Giám đốc điều hành", office: "Racons | TP. Hồ Chí Minh", image: img("1560250097-0b93528c311a", 900) },
+    { name: "KTS. Trần Thị B", role: "Giám đốc sáng tạo", office: "Racons | TP. Hồ Chí Minh", image: img("1573496359142-b8d87734a5a2", 900) },
+    { name: "KS. Lê Văn C", role: "Giám đốc thi công", office: "Racons | TP. Hồ Chí Minh", image: img("1507003211169-0a1dd7228f2d", 900) },
+    { name: "KTS. Phạm Thị D", role: "Trưởng phòng thiết kế nội thất", office: "Racons | TP. Hồ Chí Minh", image: img("1580489944761-15a19d654956", 900) },
+    { name: "KS. Hoàng Văn E", role: "Trưởng bộ phận MEP", office: "Racons MEP | TP. Hồ Chí Minh", image: img("1519085360753-af0119f7cbe7", 900) },
+  ],
+
   products: [
     { name: "Sofa Mây Indochine", cat: "Sofa", price: "28.500.000đ", badge: "Mới", image: img("1586023492125-27b2c045efd7", 700) },
     { name: "Bàn ăn gỗ Óc chó", cat: "Bàn", price: "35.000.000đ", image: img("1617806118233-18e1de247200", 700) },

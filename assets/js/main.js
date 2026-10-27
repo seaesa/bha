@@ -293,11 +293,18 @@
       <div class="ps__row"><span>${p.source}</span><time>${p.date}</time></div>
       <h3>${p.title}</h3>
     </a>`;
+  const cardTeam = p => `
+    <div class="ps__card ps__card--team">
+      <div class="ph"><img src="${p.image}" alt="${p.name}" loading="lazy"></div>
+      <div class="ps__row"><span>${p.office}</span></div>
+      <h3>${p.name}<br>${p.role}</h3>
+    </div>`;
   $$("[data-slider]").forEach(ps => {
     const track = $(".ps__track", ps);
     const type = ps.dataset.slider;
     if (type === "posts") track.innerHTML = D.posts.map(cardPost).join("");
     if (type === "press") track.innerHTML = D.press.map(cardPress).join("");
+    if (type === "team") track.innerHTML = (D.team || []).map(cardTeam).join("");
     const [prev, next] = $$(".ps__arrows button", ps);
     const bar = $(".ps__bar i", ps);
     const step = () => ($(".ps__card", track)?.offsetWidth || 300) + parseFloat(getComputedStyle(track).columnGap || 0);
